@@ -38,7 +38,11 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({ summary, onFil
   }
 
   function describeArc(x: number, y: number, innerRadius: number, outerRadius: number, startAngle: number, endAngle: number) {
-    // Clamp to prevent full 360 glitch in SVG path
+    if (endAngle <= startAngle) {
+      return '';
+    }
+
+    // Clamp to prevent full 360 glitch in SVG path while preserving the visible slice.
     const effectiveEnd = Math.min(endAngle, startAngle + 359.999);
     const start = polarToCartesian(x, y, outerRadius, effectiveEnd);
     const end = polarToCartesian(x, y, outerRadius, startAngle);
@@ -90,7 +94,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({ summary, onFil
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <PieChart className="w-3.5 h-3.5 text-slate-500" />
+            {/* <PieChart className="w-3.5 h-3.5 text-slate-500" /> */}
             <span>Category Share</span>
           </button>
           <button
@@ -101,7 +105,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({ summary, onFil
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <TrendingUp className="w-3.5 h-3.5 text-slate-500" />
+            {/* <TrendingUp className="w-3.5 h-3.5 text-slate-500" /> */}
             <span>Monthly Flow</span>
           </button>
           <button
@@ -112,7 +116,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({ summary, onFil
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Calendar className="w-3.5 h-3.5 text-slate-500" />
+            {/* <Calendar className="w-3.5 h-3.5 text-slate-500" /> */}
             <span>Daily Rhythm</span>
           </button>
         </div>
@@ -131,6 +135,10 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({ summary, onFil
               <div className="relative w-56 h-56">
                 <svg viewBox="0 0 200 200" className="w-full h-full transform -rotate-90">
                   {donutSlices.map((slice) => {
+                    if (slice.fraction <= 0) {
+                      return null;
+                    }
+
                     const isHovered = hoveredCategory === slice.category_id;
                     const pathD = describeArc(
                       100,
@@ -140,6 +148,11 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({ summary, onFil
                       slice.startAngle,
                       slice.endAngle
                     );
+
+                    if (!pathD) {
+                      return null;
+                    }
+
                     return (
                       <path
                         key={slice.category_id}
