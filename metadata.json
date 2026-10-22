@@ -1,0 +1,6 @@
+{
+  "name": "Personal Expense Tracker & Budget Planner",
+  "description": "Comprehensive personal finance management platform with income & expense tracking, category budgeting, spending limit alerts, and visual analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
