@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import {useState} from 'react';
 import { FinancialSummary } from '../types.ts';
 import { formatCurrency } from '../utils/finance.ts';
-import { PieChart, TrendingUp, Calendar, ChevronRight } from 'lucide-react';
 
 interface AnalyticsChartsProps {
   summary: FinancialSummary;
